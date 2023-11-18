@@ -19,10 +19,10 @@ Após a descrição da ligação na interface, o programa automatiza a determina
 
 ## Screenshots
 <p align="center">
-  <img src="Screenshots/Screenshot_1.jpg" width="350" title="screenshot1">
-  <img src="Screenshots//Screenshot_2.jpg" width="350" title="screenshot2">
-  <img src="Screenshots//Screenshot_3.jpg" width="350" title="screenshot3">
-  <img src="Screenshots//Screenshot_4.jpg" width="350" title="screenshot4">
+  <img src="Screenshots/Screenshot_1.jpg" width="400" title="screenshot1">
+  <img src="Screenshots//Screenshot_2.jpg" width="400" title="screenshot2">
+  <img src="Screenshots//Screenshot_3.jpg" width="400" title="screenshot3">
+  <img src="Screenshots//Screenshot_4.jpg" width="400" title="screenshot4">
 </p>
 
 ## Download
