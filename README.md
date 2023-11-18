@@ -17,8 +17,18 @@ Após a descrição da ligação na interface, o programa automatiza a determina
 
 - **Visualização 3D dos Resultados:** As saídas do programa são apresentadas por meio de vetores de tensão no espaço tridimensional. Essa representação visual aprimora a compreensão dos resultados, atendendo tanto a engenheiros experientes quanto a estudantes, proporcionando uma análise de simples interpretação da distribuição de tensão nos elementos da ligação.
 
+## Screenshots
+<p align="center">
+  <img src="Screenshots/Screenshot_1.jpg" width="350" title="screenshot1">
+  <img src="Screenshots//Screenshot_2.jpg" width="350" title="screenshot2">
+  <img src="Screenshots//Screenshot_3.jpg" width="350" title="screenshot3">
+  <img src="Screenshots//Screenshot_4.jpg" width="350" title="screenshot4">
+</p>
+
 ## Download
 * __Executavel Windows__: [Download](https://github.com/EVWTRENTINI/TensaoLigacao/releases/download/v1.0/main.rar) 
 
 ## Links
-* __Contact address__: [etrentini@ufu.br](mailto:etrentini@ufu.br) 
+* __Contact address__: [etrentini@ufu.br](mailto:etrentini@ufu.br)
+
+
