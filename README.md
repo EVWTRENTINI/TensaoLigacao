@@ -9,7 +9,7 @@ $$\tau_y=\frac{F_y}{A}+\frac{M_z x}{I_z}$$
 
 ## Funcionamento
 
-Após a descrição da ligação na interface, o programa automatiza a determinação da rigidez da ligação e realiza o cálculo das tensões utilizando as equações supracitada. Essa abordagem simplifica e torna o processo eficiente e acessível, podendo ser utilizada por estudantes e engenheiros.
+Após a descrição da ligação na interface, o programa automatiza a determinação da rigidez da ligação e realiza o cálculo das tensões utilizando as equações supracitadas. Essa abordagem simplifica e torna o processo eficiente e acessível, podendo ser utilizada por estudantes e engenheiros.
 
 ## Principais Funcionalidades
 
