@@ -1,7 +1,7 @@
 # Tensão Ligação
 O programa proporciona uma abordagem simples e intuitiva para inserção dos dados relacionados à ligação, tais como posição e dimensões dos parafusos e filetes de solda. Com base nessas informações, o programa determina as propriedades geométricas da ligação e calcula as tensões utilizando as equações 
 
-$$\sigma_z=\frac{F_z}{A}+\frac{(M_x I_y+M_y I_{xy})y-(M_y I_x+M_x I_{xy})x}{I_x I_y-I_{xy}^2}$$
+$$\sigma_z = \frac{F_z}{A} + \frac{(M_x I_y + M_y I_{xy})y - (M_y I_x + M_x I_{xy})x}{I_x I_y - I_{xy}^2}$$
 
 $$\tau_x=\frac{F_x}{A}+\frac{M_z y}{I_z}$$ 
 
