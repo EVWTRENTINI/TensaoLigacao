@@ -57,12 +57,12 @@ class MatplotlibWidget(QMainWindow):
         self.parafusoTable.setItem(4, 0, QTableWidgetItem("2.2"))
         self.parafusoTable.setItem(5, 0, QTableWidgetItem("2.2"))
         ### Coordenada x
-        self.parafusoTable.setItem(0, 1, QTableWidgetItem("-4.125"))
-        self.parafusoTable.setItem(1, 1, QTableWidgetItem("4.125"))
-        self.parafusoTable.setItem(2, 1, QTableWidgetItem("-4.125"))
-        self.parafusoTable.setItem(3, 1, QTableWidgetItem("4.125"))
-        self.parafusoTable.setItem(4, 1, QTableWidgetItem("-4.125"))
-        self.parafusoTable.setItem(5, 1, QTableWidgetItem("4.125"))
+        self.parafusoTable.setItem(0, 1, QTableWidgetItem("-7.5"))
+        self.parafusoTable.setItem(1, 1, QTableWidgetItem("7.5"))
+        self.parafusoTable.setItem(2, 1, QTableWidgetItem("-7.5"))
+        self.parafusoTable.setItem(3, 1, QTableWidgetItem("7.5"))
+        self.parafusoTable.setItem(4, 1, QTableWidgetItem("-7.5"))
+        self.parafusoTable.setItem(5, 1, QTableWidgetItem("7.5"))
         ### Coordenada y
         self.parafusoTable.setItem(0, 2, QTableWidgetItem("7.5"))
         self.parafusoTable.setItem(1, 2, QTableWidgetItem("7.5"))
@@ -263,23 +263,25 @@ class MatplotlibWidget(QMainWindow):
             return
 
         # Corrige os esforços para os valores quando os mesmos atuam no centróide da ligação
-        # Todo(Eduardo): Incluir no Mxsd o momento Fzsd*cgy (verificar se soma ou subtrai)
-        # Todo(Eduardo): Incluir no Mysd o momento Fzsd*cgx (verificar se soma ou subtrai)
-        # Todo(Eduardo): Incluir no Mzsd os momentos Fxsd*cgy e Fysd*cgx (verificar se soma ou subtrai)
-        '''#######
-        ##########
-        FAZER AQUI
-        ##########
-        #######'''
+        Mxsd = Mxsd - Fzsd * cgy
+        Mysd = Mysd + Fzsd * cgx
+        Mzsd = Mzsd + Fxsd*cgy - Fysd*cgx
+        print('Conferir correção dos esforços!!!')
+
+        # Corrige coordenadas para a nova referência que é o centróide
+        coord_x_parafuso_cg = coord_x_parafuso - cgx
+        coord_y_parafuso_cg = coord_y_parafuso - cgy
+        # Todo(Eduardo): Alterar as coordenadas das soldas dentro deste escopo
+
 
         # Desenha tensões nos parafusos
         scale = float(self.escalaSpinBox.text())  # Recebe o valor da escala do spin box
         for k in range(0, len(diametro_parafuso)):  # Para cada parafuso
             # Calcula tensões
-            SIGwsd = tensaoNormal(Fzsd, At, Iy, Ix, Ixy, Mxsd, Mysd, coord_x_parafuso[k],
-                                  coord_y_parafuso[k])
-            TAUwxsd, TAUwysd, TAUwsd = calculoCisalhamento(Fxsd, Fysd, At, Mzsd, coord_x_parafuso[k],
-                                                           coord_y_parafuso[k], Ix, Iy)
+            SIGwsd = tensaoNormal(Fzsd, At, Iy, Ix, Ixy, Mxsd, Mysd, coord_x_parafuso_cg[k],
+                                  coord_y_parafuso_cg[k])
+            TAUwxsd, TAUwysd, TAUwsd = calculoCisalhamento(Fxsd, Fysd, At, Mzsd, coord_x_parafuso_cg[k],
+                                                           coord_y_parafuso_cg[k], Ix, Iy)
 
             # Desenha Tensões normais
             self.MplWidget.canvas.axes.text(SIGwsd * scale * 1.2, coord_x_parafuso[k], coord_y_parafuso[k],

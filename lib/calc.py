@@ -3,6 +3,8 @@ def tensaoNormal(Fzsd, Aew, Iy, Ix, Ixy, Mxsd, Mysd, x, y):
     b = (Mxsd * Iy + Mysd * Ixy) * y
     c = (Mysd * Ix + Mxsd * Ixy) * x
     d = Ix * Iy - Ixy ** 2
+    # todo(Eduardo) Fazer verificação a baixo
+    print('Fazer a verificação se (Ix * Iy - Ixy ** 2) = 0')
     SIGwsd = a + ((b - c) / d)
 
     return SIGwsd
@@ -53,33 +55,31 @@ def determinaPropriedadesLigacao(diametro_parafuso, coord_x_parafuso,
 
     """
 
-    # Todo(Eduardo): Calcular o centróide da ligação como um todo
-    '''#######
-    ##########
-    FAZER AQUI
-    ##########
-    #######'''
+    import numpy as np
+    # Parafusos
+    area_parafusos = np.pi * (np.array(diametro_parafuso) ** 2) / 4
+    total_area_b = np.sum(area_parafusos)
+    cgx_b = np.sum(coord_x_parafuso * area_parafusos) / total_area_b
+    cgy_b = np.sum(coord_y_parafuso * area_parafusos) / total_area_b
 
-    #Todo(Eduardo): Cácular o centróide, apagar este bloco                ####### INICIO #############
-    print('Desenvolver função que determina o centróide da ligação. Utilizando zero.')              ####
-    cgx = 0  # Coordenada x do centróide da ligação                                                 ####
-    cgy = 0  # Coordenada y do centróide da ligação                                                 ####
-    # Todo(Eduardo): Cácular o centróide, apagar este bloco               ########  FIM  #############
+    # Soldas
+    # Todo(Eduardo): Calcular o centróide da ligação incluindo soldas
+    # Todo(Eduardo): Calcular o centróide, apagar este bloco                ####### INICIO #############
+    print('Desenvolver função que determina o centróide da ligação considerando soldas')  ####
+    cgx = cgx_b  # Coordenada x do centróide da ligação                                                 ####
+    cgy = cgy_b  # Coordenada y do centróide da ligação                                                 ####
+    # Todo(Eduardo): Calcular o centróide, apagar este bloco               ########  FIM  #############
 
-    # Altera as coordenadas para dos parafusos e das soldas prara coincidirem com o CG
+    # Altera as coordenadas para dos parafusos e das soldas para coincidirem com o CG
     # Daqui para frente todas as coordenadas são em relação ao centróide da ligação
-    # Todo(Eduardo): Alterar as coordenadas dentro deste escopo
-    '''#######
-    ##########
-    FAZER AQUI
-    ##########
-    #######'''
-
+    coord_x_parafuso = coord_x_parafuso - cgx
+    coord_y_parafuso = coord_y_parafuso - cgy
+    # Todo(Eduardo): Alterar as coordenadas das soldas dentro deste escopo
 
     # Cálcula as propriedades das ligações individuais em relação ao centróide da ligação total
-    ## Parafusos
+    # Parafusos
     Ibx, Iby, Ibxy, Atb = momentoInerciaParafuso(diametro_parafuso, coord_x_parafuso, coord_y_parafuso)
-    ## Soldas
+    # Soldas
     # Todo(Eduardo): fazer função que calcula área total e inércia das soldas. Chamar ela aqui
     '''#######
     ##########
@@ -87,12 +87,12 @@ def determinaPropriedadesLigacao(diametro_parafuso, coord_x_parafuso,
     ##########
     #######'''
 
-    #Todo(Eduardo): Após fazer e chamar a função acima, apagar este bloco ####### INICIO #############
-    print('Desenvolver função que determina as propriedades das soldas. Utilizando zero até entao.')####
+    # Todo(Eduardo): Após fazer e chamar a função acima, apagar este bloco ####### INICIO #############
+    print('Desenvolver função que determina as propriedades das soldas. Utilizando zero até entao.')  ####
     Isx = 0  # inercia em relação a x das soldas                                                    ####
     Isy = 0  # inercia em relação a y das soldas                                                    ####
     Isxy = 0  # produto de inercia das soldas                                                       ####
-    Ats = 0   # Área das soldas                                                                     ####
+    Ats = 0  # Área das soldas                                                                     ####
     # Todo(Eduardo): Após fazer e chamar a função acima, apagar este bloco #####  FIM  ###############
 
     # Uni as propriedades da solda e dos parafusos
@@ -101,6 +101,5 @@ def determinaPropriedadesLigacao(diametro_parafuso, coord_x_parafuso,
     Iy = Iby + Isy  # inercia em relação a y da ligação
     Ixy = Ibxy + Isxy  # produto de inercia da ligação
     At = Atb + Ats  # Área da ligação
-
 
     return At, cgx, cgy, Ix, Iy, Ixy
