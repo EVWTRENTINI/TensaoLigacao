@@ -1,3 +1,9 @@
+import sys, os
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
 # INICIO INTERFACE
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -20,7 +26,7 @@ class MatplotlibWidget(QMainWindow):
     def __init__(self):
         # Cria a janela feita no designer
         QMainWindow.__init__(self)
-        loadUi("interfaceTensao.ui", self)  # É aqui que entra o arquivo da interface
+        loadUi(resource_path("interfaceTensao.ui"), self)  # É aqui que entra o arquivo da interface
 
         # Customiza a janela importada do designer
         self.setWindowTitle("Tensão em ligações")
