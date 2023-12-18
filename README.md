@@ -26,7 +26,7 @@ Após a descrição da ligação na interface, o programa automatiza a determina
 </p>
 
 ## Download
-* __Executavel para Windows__: [Download](https://github.com/EVWTRENTINI/TensaoLigacao/releases/download/v1.0/main.rar) 
+* __Executavel para Windows__: [Download](https://github.com/EVWTRENTINI/TensaoLigacao/releases/download/v1.1/Tensao.Ligacao.exe) 
 
 ## Links
 * __Email para contato__: [etrentini@ufu.br](mailto:etrentini@ufu.br)
