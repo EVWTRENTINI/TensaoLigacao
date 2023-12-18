@@ -3,8 +3,6 @@ def tensaoNormal(Fzsd, Aew, Iy, Ix, Ixy, Mxsd, Mysd, x, y):
     b = (Mxsd * Iy + Mysd * Ixy) * y
     c = (Mysd * Ix + Mxsd * Ixy) * x
     d = Ix * Iy - Ixy ** 2
-    # todo(Eduardo) Fazer verificação a baixo
-    print('Fazer a verificação se (Ix * Iy - Ixy ** 2) = 0')
     SIGwsd = a + ((b - c) / d)
 
     return SIGwsd
@@ -18,7 +16,26 @@ def calculoCisalhamento(Fxsd, Fysd, Aew, Mzsd, x, y, Ix, Iy):
 
     return TAUwxsd, TAUwysd, TAUwsd
 
+def momentoInerciaSolda(tw, xi, yi, xf, yf):
+    import numpy as np
+    # Calcula o comprimento de cada solda e a variação em x e y
+    dx = np.array(xf) - np.array(xi)
+    dy = np.array(yf) - np.array(yi)
+    comprimentos = np.sqrt(dx ** 2 + dy ** 2)
 
+    # Calcula a área de cada solda (comprimento x espessura)
+    areas = np.array(tw) * comprimentos
+
+    # Calcula as coordenadas centrais de cada solda
+    x_centrais = (np.array(xi) + np.array(xf)) / 2
+    y_centrais = (np.array(yi) + np.array(yf)) / 2
+
+    # Calcula inércia e produto de inércia
+    inercia_x = np.sum((comprimentos * tw * (dy ** 2 + 3 * dy * yi + 3 * yi ** 2))/3)
+    inercia_y = np.sum((comprimentos * tw * (dx ** 2 + 3 * dx * xi + 3 * xi ** 2))/3)
+    inercia_xy = np.sum((comprimentos * tw * (2 * dx * dy + 3 * dy * xi + 3 * dx * yi + 6 * xi * yi)) / 6)
+
+    return inercia_x, inercia_y, inercia_xy
 def momentoInerciaParafuso(diametro, coord_x, coord_y):
     import numpy as np
 
@@ -43,13 +60,12 @@ def momentoInerciaParafuso(diametro, coord_x, coord_y):
         j = coord_y[k] * coord_x[k] * area[k]
         inercia_xy = inercia_xy + j
 
-    areaTotal = sum(area)
-
-    return inercia_x, inercia_y, inercia_xy, areaTotal
 
 
-def determinaPropriedadesLigacao(diametro_parafuso, coord_x_parafuso,
-                                 coord_y_parafuso):  # todo(Eduardo):  Incluir listas das soldas
+    return inercia_x, inercia_y, inercia_xy
+
+
+def determinaPropriedadesLigacao(d, x,  y, tw, xi, yi, xf, yf):
     """
     Essa função determina os parametros da ligação como um todo
 
@@ -57,49 +73,60 @@ def determinaPropriedadesLigacao(diametro_parafuso, coord_x_parafuso,
 
     import numpy as np
     # Parafusos
-    area_parafusos = np.pi * (np.array(diametro_parafuso) ** 2) / 4
-    total_area_b = np.sum(area_parafusos)
-    cgx_b = np.sum(coord_x_parafuso * area_parafusos) / total_area_b
-    cgy_b = np.sum(coord_y_parafuso * area_parafusos) / total_area_b
+    if len(d) == 0:
+        total_area_b = 0.
+        cgx_b = 0.
+        cgy_b = 0.
+    else:
+        area_b = np.pi * (np.array(d) ** 2) / 4
+        total_area_b = np.sum(area_b)
+        cgx_b = np.sum(x * area_b) / total_area_b
+        cgy_b = np.sum(y * area_b) / total_area_b
 
     # Soldas
-    # Todo(Eduardo): Calcular o centróide da ligação incluindo soldas
-    # Todo(Eduardo): Calcular o centróide, apagar este bloco                ####### INICIO #############
-    print('Desenvolver função que determina o centróide da ligação considerando soldas')  ####
-    cgx = cgx_b  # Coordenada x do centróide da ligação                                                 ####
-    cgy = cgy_b  # Coordenada y do centróide da ligação                                                 ####
-    # Todo(Eduardo): Calcular o centróide, apagar este bloco               ########  FIM  #############
+    if len(tw) == 0:
+        total_area_s = 0.
+        cgx_s = 0.
+        cgy_s = 0.
+    else:
+        # Calcula o comprimento de cada solda
+        comprimentos = np.sqrt((np.array(xf) - np.array(xi))**2 + (np.array(yf) - np.array(yi))**2)
 
-    # Altera as coordenadas para dos parafusos e das soldas para coincidirem com o CG
+        # Calcula a área de cada solda (comprimento x espessura)
+        areas_s = np.array(tw) * comprimentos
+
+        # Calcula as coordenadas centrais de cada solda
+        x_centrais = (np.array(xi) + np.array(xf)) / 2
+        y_centrais = (np.array(yi) + np.array(yf)) / 2
+
+        # Calcula o centróide ponderado pela área
+        total_area_s = np.sum(areas_s)
+        cgx_s = np.sum(x_centrais * areas_s) / total_area_s
+        cgy_s = np.sum(y_centrais * areas_s) / total_area_s
+
+    cgx = (cgx_b * total_area_b + cgx_s * total_area_s)/(total_area_b + total_area_s)
+    cgy = (cgy_b * total_area_b + cgy_s * total_area_s)/(total_area_b + total_area_s)
+
+    # Altera as coordenadas dos parafusos e das soldas para coincidirem com o CG
     # Daqui para frente todas as coordenadas são em relação ao centróide da ligação
-    coord_x_parafuso = coord_x_parafuso - cgx
-    coord_y_parafuso = coord_y_parafuso - cgy
-    # Todo(Eduardo): Alterar as coordenadas das soldas dentro deste escopo
+    x = x - cgx
+    y = y - cgy
+    xi = xi - cgx
+    yi = yi - cgy
+    xf = xf - cgx
+    yf = yf - cgy
 
     # Cálcula as propriedades das ligações individuais em relação ao centróide da ligação total
     # Parafusos
-    Ibx, Iby, Ibxy, Atb = momentoInerciaParafuso(diametro_parafuso, coord_x_parafuso, coord_y_parafuso)
+    Ibx, Iby, Ibxy = momentoInerciaParafuso(d, x, y)
     # Soldas
-    # Todo(Eduardo): fazer função que calcula área total e inércia das soldas. Chamar ela aqui
-    '''#######
-    ##########
-    FAZER AQUI
-    ##########
-    #######'''
-
-    # Todo(Eduardo): Após fazer e chamar a função acima, apagar este bloco ####### INICIO #############
-    print('Desenvolver função que determina as propriedades das soldas. Utilizando zero até entao.')  ####
-    Isx = 0  # inercia em relação a x das soldas                                                    ####
-    Isy = 0  # inercia em relação a y das soldas                                                    ####
-    Isxy = 0  # produto de inercia das soldas                                                       ####
-    Ats = 0  # Área das soldas                                                                     ####
-    # Todo(Eduardo): Após fazer e chamar a função acima, apagar este bloco #####  FIM  ###############
+    Isx, Isy, Isxy = momentoInerciaSolda(tw, xi, yi, xf, yf)
 
     # Uni as propriedades da solda e dos parafusos
     # As propriedades só podem ser somadas desta forma caso elas forem calculadas em relação ao mesmo centróide
     Ix = Ibx + Isx  # inercia em relação a x da ligação
     Iy = Iby + Isy  # inercia em relação a y da ligação
     Ixy = Ibxy + Isxy  # produto de inercia da ligação
-    At = Atb + Ats  # Área da ligação
+    At = total_area_b + total_area_s  # Área da ligação
 
     return At, cgx, cgy, Ix, Iy, Ixy

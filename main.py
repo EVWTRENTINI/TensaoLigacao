@@ -43,27 +43,27 @@ class MatplotlibWidget(QMainWindow):
         ## Centraliza valores da tabela de forças
         delegate = AlignDelegate(self.forcasTable)  # Necessario para centralizar a tabela
         self.forcasTable.setItemDelegate(delegate)  # Centraliza toda a tabela
-        ## Altera a largura das colunas da tabela de parafusos
+        # Altera a largura das colunas da tabela de parafusos
         self.parafusoTable.setColumnWidth(0, 60)
         self.parafusoTable.setColumnWidth(1, 30)
         self.parafusoTable.setColumnWidth(2, 30)
-        ## Insere valores iniciais na tabela de parafusos
+        # Insere valores iniciais na tabela de parafusos
         self.parafusoTable.setRowCount(6)
-        ### Diametro
+        ## Diametro
         self.parafusoTable.setItem(0, 0, QTableWidgetItem("2.2"))
         self.parafusoTable.setItem(1, 0, QTableWidgetItem("2.2"))
         self.parafusoTable.setItem(2, 0, QTableWidgetItem("2.2"))
         self.parafusoTable.setItem(3, 0, QTableWidgetItem("2.2"))
         self.parafusoTable.setItem(4, 0, QTableWidgetItem("2.2"))
         self.parafusoTable.setItem(5, 0, QTableWidgetItem("2.2"))
-        ### Coordenada x
+        ## Coordenada x
         self.parafusoTable.setItem(0, 1, QTableWidgetItem("-7.5"))
         self.parafusoTable.setItem(1, 1, QTableWidgetItem("7.5"))
         self.parafusoTable.setItem(2, 1, QTableWidgetItem("-7.5"))
         self.parafusoTable.setItem(3, 1, QTableWidgetItem("7.5"))
         self.parafusoTable.setItem(4, 1, QTableWidgetItem("-7.5"))
         self.parafusoTable.setItem(5, 1, QTableWidgetItem("7.5"))
-        ### Coordenada y
+        ## Coordenada y
         self.parafusoTable.setItem(0, 2, QTableWidgetItem("7.5"))
         self.parafusoTable.setItem(1, 2, QTableWidgetItem("7.5"))
         self.parafusoTable.setItem(2, 2, QTableWidgetItem("0"))
@@ -73,15 +73,32 @@ class MatplotlibWidget(QMainWindow):
         ## Centraliza valores da tabela de parafusos
         delegate = AlignDelegate(self.parafusoTable)  # Necessário para centralizar a tabela
         self.parafusoTable.setItemDelegate(delegate)  # Centraliza toda a tabela
+        ## Centraliza valores da tabela de soldas
+        delegate = AlignDelegate(self.soldaTable)  # Necessário para centralizar a tabela
+        self.soldaTable.setItemDelegate(delegate)  # Centraliza toda a tabela
         ## Altera a largura das coluna da tabela de soldas
         self.soldaTable.setColumnWidth(0, 60)
         self.soldaTable.setColumnWidth(1, 50)
         self.soldaTable.setColumnWidth(2, 50)
         self.soldaTable.setColumnWidth(3, 50)
         self.soldaTable.setColumnWidth(4, 50)
-        ## Centraliza valores da tabela de soldas
-        delegate = AlignDelegate(self.soldaTable)  # Necessário para centralizar a tabela
-        self.soldaTable.setItemDelegate(delegate)  # Centraliza toda a tabela
+        ## Insere valores iniciais na tabela de parafusos
+        self.soldaTable.setRowCount(2)
+        ## Espessura
+        self.soldaTable.setItem(0, 0, QTableWidgetItem("0.5"))
+        self.soldaTable.setItem(1, 0, QTableWidgetItem("0.5"))
+        ## xi
+        self.soldaTable.setItem(0, 1, QTableWidgetItem("-9"))
+        self.soldaTable.setItem(1, 1, QTableWidgetItem("-9"))
+        ## yi
+        self.soldaTable.setItem(0, 2, QTableWidgetItem("-10"))
+        self.soldaTable.setItem(1, 2, QTableWidgetItem("10"))
+        ## xf
+        self.soldaTable.setItem(0, 3, QTableWidgetItem("9"))
+        self.soldaTable.setItem(1, 3, QTableWidgetItem("9"))
+        ## yf
+        self.soldaTable.setItem(0, 4, QTableWidgetItem("-10"))
+        self.soldaTable.setItem(1, 4, QTableWidgetItem("10"))
 
         # Liga o clicar dos botões da interface com as funções criadas aqui dentro
         ## Botoes de adicionar e demover linhas
@@ -135,12 +152,12 @@ class MatplotlibWidget(QMainWindow):
         d = []
         x = []
         y = []
-        At = 0
-        cgx = 0
-        cgy = 0
-        Ix = 0
-        Iy = 0
-        Ixy = 0
+        At = 0.
+        cgx = 0.
+        cgy = 0.
+        Ix = 0.
+        Iy = 0.
+        Ixy = 0.
 
         return d, x, y, At, cgx, cgy, Ix, Iy, Ixy
 
@@ -153,20 +170,16 @@ class MatplotlibWidget(QMainWindow):
         """
 
         # Inicializa as variaveis para trabalhar com parafusos
-        diametro_parafuso = []
-        coord_x_parafuso = []
-        coord_y_parafuso = []
         d = []
         x = []
         y = []
-
         # Inicializa as variaveis para trabalhar com soldas
-        # Todo(Eduardo): Inicializa as variaveis para trabalhar com soldas
-        '''#######
-        ##########
-        FAZER AQUI
-        ##########
-        #######'''
+        tw = []
+        xi = []
+        yi = []
+        xf = []
+        yf = []
+
 
         try:  # Esse try é para ver se a aquisição de dados é realizada com sucesso
             # Aqui inicia a aquisição de dados da tabela de parafusos
@@ -175,24 +188,23 @@ class MatplotlibWidget(QMainWindow):
                 d.append(float(self.parafusoTable.item(row, 0).text()))
                 x.append(float(self.parafusoTable.item(row, 1).text()))
                 y.append(float(self.parafusoTable.item(row, 2).text()))
-            # Caso o 'for' acima tenha concluido sem nenhum erro é então copiada os valores para as variaveis definitivas
-            diametro_parafuso = d[:]
-            coord_x_parafuso = x[:]
-            coord_y_parafuso = y[:]
 
             # Aquisição de dados da tabela de soldas
-            # Todo(Eduardo): Aquirir dados da tabela de soldas
-            '''#######
-            ##########
-            FAZER AQUI
-            ##########
-            #######'''
+            rowCount = self.soldaTable.rowCount()
+            for row in range(rowCount):
+                tw.append(float(self.soldaTable.item(row, 0).text()))
+                xi.append(float(self.soldaTable.item(row, 1).text()))
+                yi.append(float(self.soldaTable.item(row, 2).text()))
+                xf.append(float(self.soldaTable.item(row, 3).text()))
+                yf.append(float(self.soldaTable.item(row, 4).text()))
 
             # Determina as propriedades da ligação considerando parafusos e soldas
-            # Todo(Eduardo): A determinaPropriedadesLigacao() deve ser completada leia TODO dentro dela
-            At, cgx, cgy, Ix, Iy, Ixy = determinaPropriedadesLigacao(diametro_parafuso, coord_x_parafuso,
-                                                                     coord_y_parafuso)
+            At, cgx, cgy, Ix, Iy, Ixy = determinaPropriedadesLigacao(d, x, y, tw, xi, yi, xf, yf)
 
+            # Checa se a ligação é valida
+
+            if -1e-9 < (Ix * Iy - Ixy ** 2) < 1e-9:
+                raise Exception("(Ix * Iy - Ixy ** 2) == 0")
             # Atualiza a interface com os valores calculados
             self.atualizaInterfaceSucesso(At, cgx, cgy, Ix, Iy, Ixy)
 
@@ -200,7 +212,7 @@ class MatplotlibWidget(QMainWindow):
             # Atualiza a interface em caso de falha
             d, x, y, At, cgx, cgy, Ix, Iy, Ixy = self.atualizaInterfaceFalha()  # Retorna valores para não crashar # Todo(Eduardo): adicionar parametros das soldas
 
-        return diametro_parafuso, coord_x_parafuso, coord_y_parafuso, At, cgx, cgy, Ix, Iy, Ixy  # Todo(Eduardo): adicionar parametros das soldas
+        return d, x, y, tw, xi, yi, xf, yf, At, cgx, cgy, Ix, Iy, Ixy
 
     def desenharAction(self):
         """
@@ -211,42 +223,51 @@ class MatplotlibWidget(QMainWindow):
         """
 
         # Chama as funções que adquirem os dados das tabelas.
-        diametro_parafuso, coord_x_parafuso, coord_y_parafuso, At, cgx, cgy, Ix, Iy, Ixy = self.pegaDadosTabelas() # Todo(Eduardo): adicionar parametros das soldas
+        diametro_parafuso, coord_x_parafuso, coord_y_parafuso, tw, xi, yi, xf, yf, At, cgx, cgy, Ix, Iy, Ixy = self.pegaDadosTabelas()
 
         # Prepara a figura
         self.MplWidget.canvas.axes.clear()  # Limpa a figura para evitar sobreposição que ocasiona em lag
         self.MplWidget.canvas.axes.set_box_aspect([1, 1, 1])  # Não sei se é necessário
 
+        maiorValorEscalaParafuso = 0
+        maiorValorEscalaSolda = 0
         ## Ajusta o tamanho da figura para caber a ligação
-        # Todo(Eduardo): Repensar em como é feito esse ajuste quando alem de parafusos existirem soldas
         if len(diametro_parafuso) > 0:  # Checa se tem parafuso e define o tamanho da figura em relação a eles
-            maiorValorEscala = max(max(coord_x_parafuso), max(coord_y_parafuso), max(diametro_parafuso))
-            self.MplWidget.canvas.axes.set_xlim3d(-maiorValorEscala * 1.25,
-                                                  maiorValorEscala * 1.25)  # tamanho da grade do desenho em 3D
-            self.MplWidget.canvas.axes.set_ylim3d(-maiorValorEscala * 1.25,
-                                                  maiorValorEscala * 1.25)  # fazer em relação ao tamanho do desenho dps
-            self.MplWidget.canvas.axes.set_zlim3d(-maiorValorEscala * 1.25, maiorValorEscala * 1.25)
-            self.MplWidget.canvas.axes.axis('off')  # Remove o grid do fundo da figura
+            maiorValorEscalaParafuso = max(max(coord_x_parafuso), max(coord_y_parafuso))
+        if len(tw) > 0:
+            maiorValorEscalaSolda = max(max(xi), max(yi), max(xf), max(yf))
 
-            # Chama a função que desenha os parafusos
-            if len(diametro_parafuso) > 0:  # Checa se existe parafuso na ligação
-                for k in range(0, len(diametro_parafuso)):  # Para cada parafuso
-                    self.MplWidget.canvas.axes = drawParafuso(coord_x_parafuso[k], coord_y_parafuso[k],
-                                                              diametro_parafuso[k], self.MplWidget.canvas.axes)
+        maiorValorEscala = max((maiorValorEscalaParafuso, maiorValorEscalaSolda))
+        self.MplWidget.canvas.axes.set_xlim3d(-maiorValorEscala * 1.25,
+                                              maiorValorEscala * 1.25)  # tamanho da grade do desenho em 3D
+        self.MplWidget.canvas.axes.set_ylim3d(-maiorValorEscala * 1.25,
+                                              maiorValorEscala * 1.25)  # fazer em relação ao tamanho do desenho dps
+        self.MplWidget.canvas.axes.set_zlim3d(-maiorValorEscala * 1.25, maiorValorEscala * 1.25)
+        self.MplWidget.canvas.axes.axis('off')  # Remove o grid do fundo da figura
+
+        # Chama a função que desenha os parafusos
+        if len(diametro_parafuso) > 0:  # Checa se existe parafuso na ligação
+            for k in range(0, len(diametro_parafuso)):  # Para cada parafuso
+                self.MplWidget.canvas.axes = drawParafuso(coord_x_parafuso[k], coord_y_parafuso[k],
+                                                          diametro_parafuso[k], self.MplWidget.canvas.axes)
+
+        if len(tw) > 0:  # Checa se existe solda na ligação
+            for k in range(0, len(tw)):  # Para cada solda
+                self.MplWidget.canvas.axes = drawSolda(tw[k], xi[k], yi[k], xf[k], yf[k], self.MplWidget.canvas.axes)
 
         self.MplWidget.canvas.draw()  # Mostra o que foi mandado ser desenhado
 
-        return diametro_parafuso, coord_x_parafuso, coord_y_parafuso, At, cgx, cgy, Ix, Iy, Ixy  # Todo(Eduardo): adicionar parametros das soldas
+        return diametro_parafuso, coord_x_parafuso, coord_y_parafuso, tw, xi, yi, xf, yf, At, cgx, cgy, Ix, Iy, Ixy
 
     def calcularAction(self):
         """
         Cálcula e desenha as tensões
         """
 
-        diametro_parafuso, coord_x_parafuso, coord_y_parafuso, At, cgx, cgy, Ix, Iy, Ixy = self.desenharAction()  # Todo(Eduardo): adicionar parametros das soldas
+        diametro_parafuso, coord_x_parafuso, coord_y_parafuso, tw, xi, yi, xf, yf, At, cgx, cgy, Ix, Iy, Ixy = self.desenharAction()
 
         # Verifica se a aquisição de dados foi realizada com sucesso, caso contrario termina a execução
-        if diametro_parafuso == []:  # Todo(Eduardo): Pensar em uma verificação quando tiver solda tambem. Tente algo do tipo: "if diametro_parafuso == [] and espessura_solda == []:"
+        if diametro_parafuso == [] and tw == [] or At == 0:
             # No caso de falha a atualização da interface já foi feita na função self.desenharAction()
             return
 
@@ -265,17 +286,21 @@ class MatplotlibWidget(QMainWindow):
         # Corrige os esforços para os valores quando os mesmos atuam no centróide da ligação
         Mxsd = Mxsd - Fzsd * cgy
         Mysd = Mysd + Fzsd * cgx
-        Mzsd = Mzsd + Fxsd*cgy - Fysd*cgx
-        print('Conferir correção dos esforços!!!')
+        Mzsd = Mzsd + Fxsd * cgy - Fysd * cgx
 
         # Corrige coordenadas para a nova referência que é o centróide
-        coord_x_parafuso_cg = coord_x_parafuso - cgx
-        coord_y_parafuso_cg = coord_y_parafuso - cgy
-        # Todo(Eduardo): Alterar as coordenadas das soldas dentro deste escopo
+        if not diametro_parafuso == []:
+            coord_x_parafuso_cg = coord_x_parafuso - np.array(cgx)
+            coord_y_parafuso_cg = coord_y_parafuso - np.array(cgy)
+        if not tw == []:
+            xi_cg = xi - np.array(cgx)
+            yi_cg = yi - np.array(cgy)
+            xf_cg = xf - np.array(cgx)
+            yf_cg = yf - np.array(cgy)
 
+        scale = float(self.escalaSpinBox.text())  # Recebe o valor da escala do spin box
 
         # Desenha tensões nos parafusos
-        scale = float(self.escalaSpinBox.text())  # Recebe o valor da escala do spin box
         for k in range(0, len(diametro_parafuso)):  # Para cada parafuso
             # Calcula tensões
             SIGwsd = tensaoNormal(Fzsd, At, Iy, Ix, Ixy, Mxsd, Mysd, coord_x_parafuso_cg[k],
@@ -318,6 +343,54 @@ class MatplotlibWidget(QMainWindow):
                                                    0, 0, 0 + TAUwysd * scale,
                                                    mutation_scale=20,
                                                    color='blue')
+        # Desenha tensões nas soldas
+        for k in range(0, len(tw)):  # Para cada parafuso
+            total_steps = 6
+            total_steps = max(total_steps, 2)
+            deltaX = xf_cg[k] - xi_cg[k]
+            deltaY = yf_cg[k] - yi_cg[k]
+            stepx = deltaX / (total_steps - 1)
+            stepy = deltaY / (total_steps - 1)
+            for step in range(0, total_steps):  # Para cada discretização
+                # Calcula tensões
+                Xs_cg = xi_cg[k] + stepx*step
+                Ys_cg = yi_cg[k] + stepy*step
+                Xs = xi[k] + stepx*step
+                Ys = yi[k] + stepy*step
+                SIGwsd = tensaoNormal(Fzsd, At, Iy, Ix, Ixy, Mxsd, Mysd, Xs_cg, Ys_cg)
+                TAUwxsd, TAUwysd, TAUwsd = calculoCisalhamento(Fxsd, Fysd, At, Mzsd, Xs_cg, Ys_cg, Ix, Iy)
+                # Desenha Tensões normais
+                self.MplWidget.canvas.axes.text(SIGwsd * scale * 1.2, Xs, Ys, str(round(SIGwsd, 2)), c='red',
+                                                ha='center', ma='center', zorder=1000)
+                self.MplWidget.canvas.axes.arrow3D(0, Xs, Ys, 0 + SIGwsd * scale, 0, 0, mutation_scale=20,
+                                                   color='red', zorder=1000)
+                # Desenha Tensões de cisalhamento
+                if not self.componenteRadioButton.isChecked():  # Desenhando a RESULTANTE
+                    self.MplWidget.canvas.axes.text(0, Xs + TAUwxsd * scale * 1.2,
+                                                   Ys + TAUwysd * scale * 1.2,
+                                                    str(round(TAUwsd, 2)), c='darkcyan',
+                                                    ha='center', ma='center', zorder=1000)
+                    self.MplWidget.canvas.axes.arrow3D(0, Xs, Ys,
+                                                       0, TAUwxsd * scale, TAUwysd * scale,
+                                                       mutation_scale=20,
+                                                       color='darkcyan')
+                else:  # Desenhando as COMPONENTES
+                    # Coordenada x
+                    self.MplWidget.canvas.axes.text(0, Xs + TAUwxsd * scale * 1.2, Ys,
+                                                    str(round(TAUwxsd, 2)), c='green',
+                                                    ha='center', ma='center', zorder=1000)
+                    self.MplWidget.canvas.axes.arrow3D(0, Xs, Ys,
+                                                       0, 0 + TAUwxsd * scale, 0,
+                                                       mutation_scale=20,
+                                                       color='green')
+                    # Coordenada y
+                    self.MplWidget.canvas.axes.text(0, Xs, Ys + TAUwysd * scale * 1.2,
+                                                    str(round(TAUwysd, 2)), c='blue',
+                                                    ha='center', ma='center', zorder=1000)
+                    self.MplWidget.canvas.axes.arrow3D(0, Xs, Ys,
+                                                       0, 0, 0 + TAUwysd * scale,
+                                                       mutation_scale=20,
+                                                       color='blue')
         self.statusLabel.setText(
             '<html><head/><body><p align="center">Tensões determinadas com sucesso.</p></body></html>')
 

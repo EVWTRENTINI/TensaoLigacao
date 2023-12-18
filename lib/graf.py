@@ -4,7 +4,53 @@ from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d.proj3d import proj_transform
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 
+def drawSolda(tw, xi, yi, xf, yf, ax):
+    deltaX = xf - xi
+    deltaY = yf - yi
+    l = np.sqrt(deltaX ** 2 + deltaY ** 2)
+    if l <= 0:
+        return ax
 
+    senAlfa = deltaY / l
+    cosAlfa = deltaX / l
+
+    v = np.zeros(shape=(8, 3))
+    f = np.zeros(shape=(6, 4), dtype=int)
+    #v = np.zeros(shape=(4, 3))
+    #f = np.zeros(shape=(1, 4), dtype=int)
+    # Z X Y
+    v[0, 0] = 0
+    v[0, 1] = xi - tw / 2 * senAlfa
+    v[0, 2] = yi + tw / 2 * cosAlfa
+    v[1, 0] = 0
+    v[1, 1] = xf - tw / 2 * senAlfa
+    v[1, 2] = yf + tw / 2 * cosAlfa
+    v[2, 0] = 0
+    v[2, 1] = xf + tw / 2 * senAlfa
+    v[2, 2] = yf - tw / 2 * cosAlfa
+    v[3, 0] = 0
+    v[3, 1] = xi + tw / 2 * senAlfa
+    v[3, 2] = yi - tw / 2 * cosAlfa
+    ############
+    v[4, 0] = tw / 2
+    v[4, 1] = xi - tw / 2 * senAlfa
+    v[4, 2] = yi + tw / 2 * cosAlfa
+    v[5, 0] = tw / 2
+    v[5, 1] = xf - tw / 2 * senAlfa
+    v[5, 2] = yf + tw / 2 * cosAlfa
+    v[6, 0] = tw / 2
+    v[6, 1] = xf + tw / 2 * senAlfa
+    v[6, 2] = yf - tw / 2 * cosAlfa
+    v[7, 0] = tw / 2
+    v[7, 1] = xi + tw / 2 * senAlfa
+    v[7, 2] = yi - tw / 2 * cosAlfa
+    f = [[0, 1, 2, 3], [4, 5, 6, 7], [0, 4, 7, 3], [1, 5, 6, 2], [0, 1, 4, 3], [3, 2, 6, 7]]
+
+    pc = art3d.Poly3DCollection(v[f], facecolor="grey", zorder=-1000)
+    ax.add_collection3d(pc)
+
+
+    return ax
 def drawParafuso(x, y, d, ax):
 
     h = d * .2
@@ -28,10 +74,10 @@ def drawParafuso(x, y, d, ax):
         v[lados] = np.array([z,x,y])
 
         f = np.zeros(shape=(lados, 3), dtype=int)
+
         for i in range(0, lados):
             f[i] = np.array([i, i+1, lados])
         f[lados-1][2] = 0
-
         pc = art3d.Poly3DCollection(v[f], facecolor="grey",zorder=-1000)
         ax.add_collection3d(pc)
 

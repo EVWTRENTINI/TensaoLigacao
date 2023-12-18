@@ -30,7 +30,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Forças solicitantes</string>
+     <string>Forças solicitantes, aplicadas no [0,0]</string>
     </property>
     <widget class="QTableWidget" name="forcasTable">
      <property name="geometry">
